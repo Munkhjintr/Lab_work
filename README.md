@@ -1,2 +1,2 @@
 # text
-hello= ich bin student
+hallo= ich bin student
