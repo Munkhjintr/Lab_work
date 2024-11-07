@@ -1,0 +1,15 @@
+Recursion:
+def factorial(n):
+    if n == 0:
+        return 1
+    return n * factorial(n-1)
+
+
+Divide-and-Conquer:
+def factorial_dc(n):
+    if n == 0:
+        return 1
+    if n == 1:
+        return 1
+    mid = n // 2
+    return factorial_dc(mid) * factorial_dc(n - mid) * n // mid
