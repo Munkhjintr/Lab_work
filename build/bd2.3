@@ -1,0 +1,32 @@
+import java.util.Arrays;
+
+public class CoinChange {
+    public static int[] coinChange(int[] coins, int amount) {
+   
+        Arrays.sort(coins);
+        int[] result = new int[coins.length];
+
+        int i = coins.length - 1;
+        while (amount > 0) {
+            if (coins[i] <= amount) {
+                result[i]++;
+                amount -= coins[i];
+            } else {
+                i--;
+            }
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] coins = {25, 10, 5, 1};
+        int amount = 30;
+        int[] result = coinChange(coins, amount);
+
+        System.out.println("Coins used:");
+        for (int i = 0; i < coins.length; i++) {
+            System.out.println(coins[i] + " cents: " + result[i]);
+        }
+    }
+}
