@@ -1,0 +1,66 @@
+import java.util.ArrayList;
+import java.util.Stack;
+
+public class BackupStack<T> {
+    private Stack<T> mainStack;
+    private ArrayList<Stack<T>> backups;
+    private int k;
+    private int operationCount;
+    private double totalCost;
+
+    public BackupStack(int k) {
+        this.k = k;
+        this.mainStack = new Stack<>();
+        this.backups = new ArrayList<>();
+        this.operationCount = 0;
+        this.totalCost = 0;
+    }
+
+    public void push(T item) {
+        mainStack.push(item);
+        operationCount++;
+        totalCost += 1;
+        if (operationCount % k == 0) {
+            @SuppressWarnings("unchecked")
+            Stack<T> backupStack = (Stack<T>) mainStack.clone();
+            backups.add(backupStack);
+            totalCost += mainStack.size();
+        }
+    }
+
+    public T pop() {
+        if (mainStack.isEmpty()) {
+            throw new IllegalStateException("Stack hooson");
+        }
+        T item = mainStack.pop();
+        operationCount++;
+        totalCost += 1;
+        if (operationCount % k == 0) {
+            @SuppressWarnings("unchecked")
+            Stack<T> backupStack = (Stack<T>) mainStack.clone();
+            backups.add(backupStack);
+            totalCost += mainStack.size();
+        }
+        return item;
+    }
+
+    public double getAverageCost() {
+        return totalCost / operationCount;
+    }
+
+    public static void analyzeCosts(int n, int k) {
+        BackupStack<Integer> stack = new BackupStack<>(k);
+        for (int i = 0; i < n; i++) {
+            stack.push(i);
+        }
+        System.out.println("niit vildel: " + n);
+        System.out.println("nuutsluh interval (k): " + k);
+        System.out.println("neg vildeliin dundaj zardal: " + stack.getAverageCost());
+    }
+
+    public static void main(String[] args) {
+        analyzeCosts(1000, 10);
+        analyzeCosts(1000, 50);
+        analyzeCosts(1000, 100);
+    }
+}
