@@ -1,0 +1,37 @@
+from typing import List
+
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        freq = [0] * 26
+        
+        for task in tasks:
+            freq[ord(task) - ord('A')] += 1
+        
+        freq.sort()
+        
+        max_freq = freq[25]
+        idle_time = (max_freq - 1) * n
+        
+        for i in range(24, -1, -1):
+            if freq[i] == 0:
+                break
+            idle_time -= min(max_freq - 1, freq[i])
+        
+        idle_time = max(0, idle_time)
+        
+        return len(tasks) + idle_time
+
+def main():
+    solution = Solution()
+    
+    tasks1 = ["A","A","A","B","B","B"]
+    print(solution.leastInterval(tasks1, 2))
+    
+    tasks2 = ["A","C","A","B","D","B"]
+    print(solution.leastInterval(tasks2, 1))
+    
+    tasks3 = ["A","A","A","B","B","B"]
+    print(solution.leastInterval(tasks3, 3))
+
+if __name__ == "__main__":
+    main()
