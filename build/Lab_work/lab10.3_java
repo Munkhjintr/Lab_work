@@ -1,0 +1,70 @@
+public class PotentialFunction {
+    public static class OriginalPhi {
+        private double initialValue;
+
+        public OriginalPhi(double initialValue) {
+            if (initialValue == 0) {
+                throw new IllegalArgumentException("anhnii utga 0 baij bolohgui");
+            }
+            this.initialValue = initialValue;
+        }
+
+        public double calculate(int i) {
+            if (i == 0) {
+                return initialValue;
+            }
+            return initialValue + i * 2;
+        }
+
+        public double unitCost(int i) {
+            if (i <= 0) {
+                return 0;
+            }
+            return calculate(i) - calculate(i - 1);
+        }
+    }
+
+    public static class ModifiedPhi {
+        private OriginalPhi originalPhi;
+
+        public ModifiedPhi(OriginalPhi originalPhi) {
+            this.originalPhi = originalPhi;
+        }
+
+        public double calculate(int i) {
+            if (i == 0) {
+                return 0;
+            }
+            return originalPhi.calculate(i) - originalPhi.calculate(0);
+        }
+
+        public double unitCost(int i) {
+            if (i <= 0) {
+                return 0;
+            }
+            return originalPhi.unitCost(i);
+        }
+    }
+
+    public static void main(String[] args) {
+        OriginalPhi phi = new OriginalPhi(5.0);
+        ModifiedPhi phiPrime = new ModifiedPhi(phi);
+
+        System.out.println("Original Potential Function (Φ):");
+        System.out.println("Φ(D_0) = " + phi.calculate(0));
+        System.out.println("Φ(D_1) = " + phi.calculate(1));
+        System.out.println("Φ(D_2) = " + phi.calculate(2));
+
+        System.out.println("\nModified Potential Function (Φ'):");
+        System.out.println("Φ'(D_0) = " + phiPrime.calculate(0));
+        System.out.println("Φ'(D_1) = " + phiPrime.calculate(1));
+        System.out.println("Φ'(D_2) = " + phiPrime.calculate(2));
+
+        System.out.println("\nUnit Costs Comparison:");
+        for (int i = 1; i <= 3; i++) {
+            System.out.println("Operation " + i + ":");
+            System.out.println("  negjiin zardal: " + phi.unitCost(i));
+            System.out.println("  modified negjiin zardal: " + phiPrime.unitCost(i));
+        }
+    }
+}
