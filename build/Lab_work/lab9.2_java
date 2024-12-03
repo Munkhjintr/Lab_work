@@ -1,0 +1,45 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+class MyStack {
+    private Queue<Integer> mainQueue;
+
+    public MyStack() {
+        mainQueue = new LinkedList<>();
+    }
+
+    public void push(int x) {
+        mainQueue.offer(x);
+        int size = mainQueue.size();
+        for (int i = 0; i < size - 1; i++) {
+            mainQueue.offer(mainQueue.poll());
+        }
+    }
+
+    public int pop() {
+        if (!empty()) {
+            return mainQueue.poll();
+        }
+        throw new RuntimeException("Stack hooson");
+    }
+
+    public int top() {
+        if (!empty()) {
+            return mainQueue.peek();
+        }
+        throw new RuntimeException("Stack hooson");
+    }
+
+    public boolean empty() {
+        return mainQueue.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        MyStack stack = new MyStack();
+        stack.push(1);
+        stack.push(2);
+        System.out.println("Top element: " + stack.top());
+        System.out.println("Popped element: " + stack.pop());
+        System.out.println("Stack hooson uu? " + stack.empty());
+    }
+}
