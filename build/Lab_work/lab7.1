@@ -1,0 +1,79 @@
+import java.util.*;
+
+public class KnapsackSolver {
+    public static int zeroOneKnapsack(int[] weights, int[] values, int capacity) {
+        int n = weights.length;
+        int[][] dp = new int[n + 1][capacity + 1];
+        
+        for (int i = 1; i <= n; i++) {
+            for (int w = 1; w <= capacity; w++) {
+                if (weights[i-1] <= w) {
+                    dp[i][w] = Math.max(
+                        values[i-1] + dp[i-1][w - weights[i-1]], 
+                        dp[i-1][w]
+                    );
+                } else {
+                    dp[i][w] = dp[i-1][w];
+                }
+            }
+        }
+        
+        return dp[n][capacity];
+    }
+    
+    public static double fractionalKnapsack(int[] weights, int[] values, int capacity) {
+        List<Item> items = new ArrayList<>();
+        for (int i = 0; i < weights.length; i++) {
+            items.add(new Item(weights[i], values[i]));
+        }
+        
+        Collections.sort(items, (a, b) -> Double.compare(b.valuePerWeight(), a.valuePerWeight()));
+        
+        double totalValue = 0;
+        int currentWeight = 0;
+        
+        for (Item item : items) {
+            if (currentWeight + item.weight <= capacity) {
+                totalValue += item.value;
+                currentWeight += item.weight;
+            } else {
+                int remainingCapacity = capacity - currentWeight;
+                double fraction = (double) remainingCapacity / item.weight;
+                totalValue += item.value * fraction;
+                break;
+            }
+        }
+        
+        return totalValue;
+    }
+    
+    static class Item {
+        int weight;
+        int value;
+        
+        public Item(int weight, int value) {
+            this.weight = weight;
+            this.value = value;
+        }
+        
+        public double valuePerWeight() {
+            return (double) value / weight;
+        }
+    }
+    
+    public static void main(String[] args) {
+        int[] weights0_1 = {10, 20, 30};
+        int[] values0_1 = {60, 100, 120};
+        int capacity0_1 = 50;
+        
+        System.out.println("0/1 knapsack hamgiin ih utga: " + 
+            zeroOneKnapsack(weights0_1, values0_1, capacity0_1));
+        
+        int[] weightsFrac = {10, 20, 30};
+        int[] valuesFrac = {60, 100, 120};
+        int capacityFrac = 50;
+        
+        System.out.println("Fractional knapsack hamgiin baga utga: " + 
+            fractionalKnapsack(weightsFrac, valuesFrac, capacityFrac));
+    }
+}
