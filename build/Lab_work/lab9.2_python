@@ -1,0 +1,33 @@
+from collections import deque
+
+class MyStack:
+    def __init__(self):
+        self.main_queue = deque()
+
+    def push(self, x: int) -> None:
+        self.main_queue.append(x)
+        for _ in range(len(self.main_queue) - 1):
+            self.main_queue.append(self.main_queue.popleft())
+
+    def pop(self) -> int:
+        if not self.empty():
+            return self.main_queue.popleft()
+        raise Exception("Stack is empty")
+
+    def top(self) -> int:
+        if not self.empty():
+            return self.main_queue[0]
+        raise Exception("Stack is empty")
+
+    def empty(self) -> bool:
+        return len(self.main_queue) == 0
+
+def main():
+    stack = MyStack()
+    stack.push(1)
+    stack.push(2)
+    print("Top element:", stack.top())
+    print("Popped element:", stack.pop())
+    print("Is stack empty?", stack.empty())
+
+main()
