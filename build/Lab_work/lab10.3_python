@@ -3,12 +3,10 @@ class OriginalPhi:
         if initial_value == 0:
             raise ValueError("anhnii utga 0 baij bolohgui")
         self.initial_value = initial_value
-    
     def calculate(self, i):
         if i == 0:
             return self.initial_value
         return self.initial_value + i * 2
-    
     def unit_cost(self, i):
         if i <= 0:
             return 0
@@ -17,12 +15,10 @@ class OriginalPhi:
 class ModifiedPhi:
     def __init__(self, original_phi):
         self.original_phi = original_phi
-    
     def calculate(self, i):
         if i == 0:
             return 0
         return self.original_phi.calculate(i) - self.original_phi.calculate(0)
-    
     def unit_cost(self, i):
         if i <= 0:
             return 0
@@ -32,21 +28,20 @@ def main():
     phi = OriginalPhi(5.0)
     phi_prime = ModifiedPhi(phi)
     
-    print("Original Potential Function (Φ):")
+    print("anhnii function (Φ):")
     print(f"Φ(D_0) = {phi.calculate(0)}")
     print(f"Φ(D_1) = {phi.calculate(1)}")
     print(f"Φ(D_2) = {phi.calculate(2)}")
     
-    print("\nModified Potential Function (Φ'):")
+    print("\nuurchilsun function (Φ'):")
     print(f"Φ'(D_0) = {phi_prime.calculate(0)}")
     print(f"Φ'(D_1) = {phi_prime.calculate(1)}")
     print(f"Φ'(D_2) = {phi_prime.calculate(2)}")
-    
     print("\nUnit Costs Comparison:")
     for i in range(1, 4):
-        print(f"Operation {i}:")
+        print(f"vildel {i}:")
         print(f"  negjiin utga: {phi.unit_cost(i)}")
-        print(f"  modified negjiin utga: {phi_prime.unit_cost(i)}")
+        print(f"  uurchilsun negjiin utga: {phi_prime.unit_cost(i)}")
 
 if __name__ == "__main__":
     main()
