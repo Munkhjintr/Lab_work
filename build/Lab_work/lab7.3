@@ -1,0 +1,84 @@
+import java.util.*;
+
+class HuffmanNode {
+    int frequency;
+    char data;
+    HuffmanNode left, right;
+    
+    HuffmanNode(char data, int frequency) {
+        this.data = data;
+        this.frequency = frequency;
+        this.left = null;
+        this.right = null;
+    }
+    
+    HuffmanNode(int frequency) {
+        this.frequency = frequency;
+        this.data = '\0';
+        this.left = null;
+        this.right = null;
+    }
+}
+
+class Solution {
+    void decode(String s, HuffmanNode root) {
+        StringBuilder result = new StringBuilder();
+        HuffmanNode current = root;
+        
+        for (char bit : s.toCharArray()) {
+            if (bit == '0') {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+            
+            if (current.left == null && current.right == null) {
+                result.append(current.data);
+                current = root;
+            }
+        }
+        
+        System.out.print(result.toString());
+    }
+    
+    HuffmanNode buildHuffmanTree(Map<Character, Integer> frequencyMap) {
+        // Priority queue to build the tree
+        PriorityQueue<HuffmanNode> pq = new PriorityQueue<>(
+            (a, b) -> a.frequency - b.frequency
+        );
+        
+        for (Map.Entry<Character, Integer> entry : frequencyMap.entrySet()) {
+            pq.offer(new HuffmanNode(entry.getKey(), entry.getValue()));
+        }
+        
+        while (pq.size() > 1) {
+            HuffmanNode left = pq.poll();
+            HuffmanNode right = pq.poll();
+            
+            HuffmanNode parent = new HuffmanNode(left.frequency + right.frequency);
+            parent.left = left;
+            parent.right = right;
+            
+            pq.offer(parent);
+        }
+        
+        return pq.poll();
+    }
+}
+
+public class HuffmanDecoding {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        
+        Map<Character, Integer> frequencyMap = new HashMap<>();
+        frequencyMap.put('A', 5);
+        frequencyMap.put('B', 2);
+        frequencyMap.put('C', 1);
+        frequencyMap.put('D', 1);
+        frequencyMap.put('R', 2);
+        
+        HuffmanNode root = solution.buildHuffmanTree(frequencyMap);
+
+        solution.decode("1001011", root);
+    }
+}
