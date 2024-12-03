@@ -1,0 +1,44 @@
+class BackupStack:
+    def __init__(self, k):
+        self.main_stack = []
+        self.backups = []
+        self.k = k
+        self.operation_count = 0
+        self.total_cost = 0
+
+    def push(self, item):
+        self.main_stack.append(item)
+        self.operation_count += 1
+        self.total_cost += 1
+        if self.operation_count % self.k == 0:
+            backup = self.main_stack.copy()
+            self.backups.append(backup)
+            self.total_cost += len(self.main_stack)
+
+    def pop(self):
+        if not self.main_stack:
+            raise IndexError("Stack hooson bn")
+        item = self.main_stack.pop()
+        self.operation_count += 1
+        self.total_cost += 1
+        if self.operation_count % self.k == 0:
+            backup = self.main_stack.copy()
+            self.backups.append(backup)
+            self.total_cost += len(self.main_stack)
+        return item
+
+    def get_average_cost(self):
+        return self.total_cost / self.operation_count
+
+def analyze_costs(n, k):
+    stack = BackupStack(k)
+    for i in range(n):
+        stack.push(i)
+    print(f"niit vildel: {n}")
+    print(f"nuutsluh interval (k): {k}")
+    print(f"neg vildeld zartsuulah dundaj zardal: {stack.get_average_cost()}")
+
+if __name__ == "__main__":
+    analyze_costs(1000, 10)
+    analyze_costs(1000, 50)
+    analyze_costs(1000, 100)
