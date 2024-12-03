@@ -1,0 +1,43 @@
+from collections import deque
+
+class Solution:
+    def openLock(self, deadends: List[str], target: str) -> int:
+        dead_set = set(deadends)
+        
+        if '0000' in dead_set:
+            return -1
+        
+        queue = deque(['0000'])
+        
+        visited = set(['0000'])
+        
+        turns = 0
+        
+        def turn_wheel(current, wheel, direction):
+            current_list = list(current)
+            digit = int(current_list[wheel])
+            digit = (digit + direction + 10) % 10
+            current_list[wheel] = str(digit)
+            return ''.join(current_list)
+        
+        while queue:
+            for _ in range(len(queue)):
+                current = queue.popleft()
+                
+                if current == target:
+                    return turns
+                
+                for wheel in range(4):
+                    forward = turn_wheel(current, wheel, 1)
+                    if forward not in dead_set and forward not in visited:
+                        queue.append(forward)
+                        visited.add(forward)
+                    
+                    backward = turn_wheel(current, wheel, -1)
+                    if backward not in dead_set and backward not in visited:
+                        queue.append(backward)
+                        visited.add(backward)
+            
+            turns += 1
+        
+        return -1
