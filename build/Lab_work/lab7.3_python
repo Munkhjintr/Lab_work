@@ -1,0 +1,61 @@
+import heapq
+from collections import defaultdict
+
+class HuffmanNode:
+    def __init__(self, data=None, frequency=0):
+        self.data = data
+        self.frequency = frequency
+        self.left = None
+        self.right = None
+
+    def __lt__(self, other):
+        return self.frequency < other.frequency
+
+class Solution:
+    def decode(self, s, root):
+        result = []
+        current = root
+
+        for bit in s:
+            if bit == '0':
+                current = current.left
+            else:
+                current = current.right
+
+            if current.left is None and current.right is None:
+                result.append(current.data)
+                current = root
+
+        print(''.join(result))
+
+    def build_huffman_tree(self, frequency_map):
+        priority_queue = []
+
+        for char, freq in frequency_map.items():
+            heapq.heappush(priority_queue, HuffmanNode(char, freq))
+
+        while len(priority_queue) > 1:
+            left = heapq.heappop(priority_queue)
+            right = heapq.heappop(priority_queue)
+
+            parent = HuffmanNode(frequency=left.frequency + right.frequency)
+            parent.left = left
+            parent.right = right
+
+            heapq.heappush(priority_queue, parent)
+
+        return heapq.heappop(priority_queue)
+
+if __name__ == "__main__":
+    solution = Solution()
+
+    frequency_map = {
+        'A': 5,
+        'B': 2,
+        'C': 1,
+        'D': 1,
+        'R': 2
+    }
+
+    root = solution.build_huffman_tree(frequency_map)
+    solution.decode("1001011", root)
