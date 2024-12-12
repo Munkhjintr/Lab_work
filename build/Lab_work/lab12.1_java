@@ -1,0 +1,45 @@
+import java.util.*;
+class Solution {
+    public boolean Finish(int numCourses, int[][] prerequisites) {
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            graph.add(new ArrayList<>());
+        }
+        for (int[] prereq : prerequisites) {
+            graph.get(prereq[1]).add(prereq[0]);
+        }
+        boolean[] visited = new boolean[numCourses];
+        boolean[] recursionStack = new boolean[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            if (Cycle(i, graph, visited, recursionStack)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private boolean Cycle(int course, List<List<Integer>> graph, 
+                              boolean[] visited, boolean[] recursionStack) {
+        if (recursionStack[course]) {
+            return true;
+        }
+        if (visited[course]) {
+            return false;
+        }
+        visited[course] = true;
+        recursionStack[course] = true;
+        for (int prereq : graph.get(course)) {
+            if (Cycle(prereq, graph, visited, recursionStack)) {
+                return true;
+            }
+        }
+        recursionStack[course] = false;
+        return false;
+    }
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        int[][] prerequisites1 = {{1,0}};
+        System.out.println("test 1iin hariu: " + solution.canFinish(2, prerequisites1));
+        int[][] prerequisites2 = {{1,0},{0,1}};
+        System.out.println("test 2iin hariu: " + solution.canFinish(2, prerequisites2));
+    }
+}
