@@ -1,0 +1,51 @@
+import random
+
+INSERTION_SORT_THRESHOLD = 10
+
+class Solution:
+    def __init__(self):
+        self.rand = random.Random()
+
+    def sortArray(self, nums):
+        self.quickSort(nums, 0, len(nums) - 1)
+        return nums
+
+    def quickSort(self, nums, low, high):
+        while low < high:
+            if high - low + 1 <= INSERTION_SORT_THRESHOLD:
+                self.insertionSort(nums, low, high)
+                break
+            else:
+                pivotIndex = self.partition(nums, low, high)
+                if pivotIndex - low < high - pivotIndex:
+                    self.quickSort(nums, low, pivotIndex - 1)
+                    low = pivotIndex + 1
+                else:
+                    self.quickSort(nums, pivotIndex + 1, high)
+                    high = pivotIndex - 1
+
+    def partition(self, nums, low, high):
+        randomIndex = self.rand.randint(low, high)
+        self.swap(nums, randomIndex, high)
+        pivot = nums[high]
+        i = low - 1
+        
+        for j in range(low, high):
+            if nums[j] < pivot:
+                i += 1
+                self.swap(nums, i, j)
+        
+        self.swap(nums, i + 1, high)
+        return i + 1
+
+    def insertionSort(self, nums, low, high):
+        for i in range(low + 1, high + 1):
+            key = nums[i]
+            j = i - 1
+            while j >= low and nums[j] > key:
+                nums[j + 1] = nums[j]
+                j -= 1
+            nums[j + 1] = key
+
+    def swap(self, nums, i, j):
+        nums[i], nums[j] = nums[j], nums[i]
