@@ -1,77 +1,24 @@
-import unittest
-
 def connecting_towns(n, routes):
-    """
-    Calculate the total number of routes between towns.
-    
-    Args:
-        n (int): Number of towns
-        routes (list): Number of routes between consecutive towns
-    
-    Returns:
-        int: Total number of routes, modulo 1234567
-    """
+    MOD = 1234567
     total_routes = 1
-    for route_count in routes:
-        total_routes = (total_routes * route_count) % 1234567
-    
+
+    for route in routes:
+        total_routes = (total_routes * route) % MOD
+
     return total_routes
 
-class TestConnectingTowns(unittest.TestCase):
-    def test_sample_case_1(self):
-        """
-        Test first sample input:
-        3 towns, 1 route from T1 to T2, 3 routes from T2 to T3
-        """
-        n = 3
-        routes = [1, 3]
-        expected = 3
-        self.assertEqual(connecting_towns(n, routes), expected)
-    
-    def test_sample_case_2(self):
-        """
-        Test second sample input:
-        4 towns, 2 routes between each pair of consecutive towns
-        """
-        n = 4
-        routes = [2, 2, 2]
-        expected = 8
-        self.assertEqual(connecting_towns(n, routes), expected)
-    
-    def test_minimal_case(self):
-        """
-        Test minimal case with 2 towns and 1 route
-        """
-        n = 2
-        routes = [1]
-        expected = 1
-        self.assertEqual(connecting_towns(n, routes), expected)
-    
-    def test_large_routes(self):
-        """
-        Test case with large route numbers
-        """
-        n = 5
-        routes = [10, 20, 30, 40]
-        expected = (10 * 20 * 30 * 40) % 1234567
-        self.assertEqual(connecting_towns(n, routes), expected)
-    
-    def test_modulo_handling(self):
-        """
-        Ensure result is always less than 1234567
-        """
-        n = 6
-        routes = [1000, 1000, 1000, 1000, 1000]
-        result = connecting_towns(n, routes)
-        self.assertTrue(0 <= result < 1234567)
-
-def main():
-    T = int(input().strip())
-    for _ in range(T):
-        n = int(input().strip())
-        routes = list(map(int, input().strip().split()))
-        result = connecting_towns(n, routes)
-        print(result)
-
 if __name__ == "__main__":
-    main()
+    import unittest
+    class TestConnectingTowns(unittest.TestCase):
+        def test_small_cases(self):
+            self.assertEqual(connecting_towns(3, [1, 3]), 3)  # 1 * 3
+            self.assertEqual(connecting_towns(4, [2, 2, 2]), 8)  # 2 * 2 * 2
+            self.assertEqual(connecting_towns(2, [1]), 1)  # 1
+
+        def test_large_routes(self):
+            self.assertEqual(connecting_towns(5, [10, 20, 30, 40]), (10 * 20 * 30 * 40) % 1234567)
+        def test_modulo_check(self):
+            result = connecting_towns(6, [1000, 1000, 1000, 1000, 1000])
+            self.assertTrue(0 <= result < 1234567)
+
+    unittest.main()
