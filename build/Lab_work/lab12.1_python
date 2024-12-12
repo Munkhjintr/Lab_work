@@ -1,0 +1,36 @@
+class Solution:
+    def canFinish(self, numCourses, prerequisites):
+        graph = [[] for _ in range(numCourses)]
+        for prereq in prerequisites:
+            graph[prereq[1]].append(prereq[0])
+        
+        visited = [False] * numCourses
+        recursionStack = [False] * numCourses
+        
+        for i in range(numCourses):
+            if self.hasCycle(i, graph, visited, recursionStack):
+                return False
+        
+        return True
+    
+    def hasCycle(self, course, graph, visited, recursionStack):
+        if recursionStack[course]:
+            return True
+        if visited[course]:
+            return False
+        
+        visited[course] = True
+        recursionStack[course] = True
+        
+        for prereq in graph[course]:
+            if self.hasCycle(prereq, graph, visited, recursionStack):
+                return True
+        
+        recursionStack[course] = False
+        return False
+solution = Solution()
+
+prerequisites1 = [[1, 0]]
+print("Test 1iin vr dvn:", solution.canFinish(2, prerequisites1))  # Expected: True
+prerequisites2 = [[1, 0], [0, 1]]
+print("Test 2iin vr dvn:", solution.canFinish(2, prerequisites2))  # Expected: False
